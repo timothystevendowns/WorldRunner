@@ -1,25 +1,28 @@
-import React , {Component} from "react";
+import React, { Component } from "react";
 
 export default class Home extends Component {
-    constructor(props){
-        super(props);
+  constructor(props) {
+    super(props);
+  }
 
-    }
-    render(){
-        return(
-            <div className="bg-holder">
-                <div className ="jumbotron vertical-align">
-                    <div className="container white-text">
-                    <h1 class="display-4">Hello, Everyone!</h1>
-                            <p class="lead">This is a place for students who are interested in learning can find there best courses to brighten there future.</p>
-                            <hr class="my-4"/>
-                            <p>To start learning, Click the Register Button to upload your Student Porfolio.</p>
-                            <p class="lead">
-                                <a class="btn btn-primary btn-lg" href="/register" role="button">Register</a>
-                            </p>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className="bg-holder">
+        <div className="jumbotron vertical-align">
+          <div className="container white-text">
+            <h1 className="display-4">Welcome To World Runner</h1>
+            <p className="lead">Run your world and keep track of its history!</p>
+            <p className="lead">
+              <a className="site-button" href="/view-world" role="button">
+                View World State
+              </a>
+              <a className="site-button ml-3" href="/run-world" role="button">
+                Run World
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }

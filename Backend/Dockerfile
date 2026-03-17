@@ -7,8 +7,7 @@ COPY ./Backend/sampleapp/.mvn ./.mvn
 COPY ./Backend/sampleapp/mvnw ./mvnw
 COPY ./Backend/sampleapp/src ./src
 
-RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Stage 2: run the app
 FROM eclipse-temurin:17-jre

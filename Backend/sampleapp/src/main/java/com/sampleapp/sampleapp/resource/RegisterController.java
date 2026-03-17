@@ -2,9 +2,12 @@ package com.sampleapp.sampleapp.resource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.Optional;
 
-import com.sampleapp.sampleapp.model.User;
-import com.sampleapp.sampleapp.repository.UserRepository;
+import com.sampleapp.sampleapp.model.WorldState;
+import com.sampleapp.sampleapp.repository.WorldStateRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -16,44 +19,33 @@ import org.springframework.web.bind.annotation.*;
 public class RegisterController {
 
     @Autowired
-    private UserRepository repository;
+    private WorldStateRepository worldStateRepository;
 
-    @PostMapping("/reg")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-
-        boolean valid = true;
-
-        // Validate name
-        //String reg = "^([A-Z][a-z]*(\\s))+[A-Z][a-z]*$";
-        //if (user.getName() == null || !user.getName().matches(reg)) {
-        //    valid = false;
-        //}
-
-        // Valid values
-        List<String> validClasses = Arrays.asList(
-                "I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"
-        );
-        List<String> validDiv = Arrays.asList("A", "B", "C");
-        List<String> validGender = Arrays.asList("Male", "Female");
-
-        boolean isValidClass = validClasses.contains(user.getClasses());
-        boolean isValidDiv = validDiv.contains(user.getDiv());
-        boolean isValidGender = validGender.contains(user.getGender());
-
-        if (!valid || !isValidClass || !isValidDiv || !isValidGender) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Invalid Input");
+    @GetMapping("/worldState")
+    public ResponseEntity<?> getWorldState() {
+        Optional<WorldState> latestWorldState = worldStateRepository.findFirstByOrderByStateCounterDesc();
+        if (latestWorldState.isPresent()) {
+            return ResponseEntity.ok(latestWorldState.get());
         }
-
-        // Save user
-        User savedUser = repository.save(user);
-
-        return ResponseEntity.ok(savedUser);
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("worldName", "Nimria");
+        response.put("stateCounter", 0);
+        Map<String, String> otherDetails = new LinkedHashMap<>();
+        otherDetails.put("detail", "detail text");
+        response.put("otherDetails", otherDetails);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/findAllUsers")
-    public List<User> getAllUser() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    @PostMapping("/runWorld")
+    public ResponseEntity<?> runWorld() {
+        Optional<WorldState> latestWorldState = worldStateRepository.findFirstByOrderByStateCounterDesc();
+        int nextStateCounter = 1;
+        if (latestWorldState.isPresent()) {
+            nextStateCounter = latestWorldState.get().getStateCounter() + 1;
+        }
+        WorldState worldStateToSave = new WorldState("Nimria", nextStateCounter);
+        worldStateRepository.save(worldStateToSave);
+        return ResponseEntity.ok("World run successful");
     }
+
 }
