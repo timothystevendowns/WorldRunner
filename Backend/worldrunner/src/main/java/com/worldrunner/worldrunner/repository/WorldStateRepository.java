@@ -1,8 +1,8 @@
-package com.sampleapp.sampleapp.repository;
+package com.worldrunner.worldrunner.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.sampleapp.sampleapp.model.WorldState;
+import com.worldrunner.worldrunner.model.WorldState;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

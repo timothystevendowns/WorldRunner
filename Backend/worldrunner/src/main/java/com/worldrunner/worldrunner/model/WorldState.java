@@ -1,4 +1,4 @@
-package com.sampleapp.sampleapp.model;
+package com.worldrunner.worldrunner.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
