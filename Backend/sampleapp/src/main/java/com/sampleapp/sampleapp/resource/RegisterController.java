@@ -8,74 +8,52 @@ import com.sampleapp.sampleapp.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+//@CrossOrigin(origins = "http://localhost:3000")
 public class RegisterController {
 
     @Autowired
     private UserRepository repository;
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @PostMapping("/reg")
-    public String registerUser(@RequestBody User user){
-        Boolean valid =true;
-        String valName = user.getName();
-        String reg = "^([A-Z][a-z]*((\s)))+[A-Z][a-z]*$";
-        String[] validclasses = {"I", "II", "III", "IV","V","VI","VII","VIII","IX","X","XI","XII"};
-        String[] valDiv = {"A", "B", "C"};
-        String[] valGender = {"Male", "Female"};
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
 
-        if(!valName.matches(reg))
-        {
-            valid =false;
-        }
+        boolean valid = true;
 
-        Boolean isvalidclass=false;
-        String validClass=user.getClasses();
-        for(int i= 0;i<12;i++){
-            if(validclasses[i].equals(validClass)){
-                isvalidclass =true;
-                break;   
-            }
-        }
-        Boolean isvalidDiv=false;
-        String Div=user.getDiv();
-        for(int i= 0;i<3;i++){
-            if(valDiv[i].equals(Div)){
-                isvalidDiv =true;
-                break;   
-            }
+        // Validate name
+        //String reg = "^([A-Z][a-z]*(\\s))+[A-Z][a-z]*$";
+        //if (user.getName() == null || !user.getName().matches(reg)) {
+        //    valid = false;
+        //}
+
+        // Valid values
+        List<String> validClasses = Arrays.asList(
+                "I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"
+        );
+        List<String> validDiv = Arrays.asList("A", "B", "C");
+        List<String> validGender = Arrays.asList("Male", "Female");
+
+        boolean isValidClass = validClasses.contains(user.getClasses());
+        boolean isValidDiv = validDiv.contains(user.getDiv());
+        boolean isValidGender = validGender.contains(user.getGender());
+
+        if (!valid || !isValidClass || !isValidDiv || !isValidGender) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid Input");
         }
 
-        Boolean isvalidGender=false;
-        String Gender=user.getGender();
-        for(int i= 0;i<2;i++){
-            if(valGender[i].equals(Gender)){
-                isvalidGender =true;
-                break;   
-            }
-        }
-        if(!isvalidDiv || !isvalidGender || !isvalidclass){
-            valid = false;
-        }
-        if(!valid){
-            return "invalid Input";
-        }
-        else{
-            repository.save(user);
-            return user.getName();
-        }
-        
+        // Save user
+        User savedUser = repository.save(user);
+
+        return ResponseEntity.ok(savedUser);
     }
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @GetMapping("/findAllUsers")
-    public List<User> getAllUser(){
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "Name"));
+    public List<User> getAllUser() {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
-    
-
 }
