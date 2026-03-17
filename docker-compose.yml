@@ -1,3 +1,4 @@
+name: world-runner
 services:
   backend:
     build:
@@ -6,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://root:password@mongodb:27017/sampledb?authSource=admin
+      - SPRING_DATA_MONGODB_URI=mongodb://root:password@mongodb:27017/worldrunner?authSource=admin
     depends_on:
       - mongodb
 

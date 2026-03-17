@@ -1,4 +1,4 @@
-package com.sampleapp.sampleapp.config;
+package com.worldrunner.worldrunner.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

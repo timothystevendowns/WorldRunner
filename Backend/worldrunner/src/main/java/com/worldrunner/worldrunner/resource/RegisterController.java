@@ -1,4 +1,4 @@
-package com.sampleapp.sampleapp.resource;
+package com.worldrunner.worldrunner.resource;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-import com.sampleapp.sampleapp.model.WorldState;
-import com.sampleapp.sampleapp.repository.WorldStateRepository;
+import com.worldrunner.worldrunner.model.WorldState;
+import com.worldrunner.worldrunner.repository.WorldStateRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
